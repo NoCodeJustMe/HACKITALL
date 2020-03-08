@@ -4,6 +4,15 @@
 #include <time.h>
 
 #define MAXN 20 // MAX SIZE OF A NAME OF A PRODUCT
+#define KRED  "\x1B[31m"
+#define KBLU  "\x1B[34m"
+#define KYEL  "\x1B[33m"
+#define KGRN  "\x1B[32m"
+#define KCYN  "\x1B[36m"
+#define KNRM  "\x1B[0m"
+
+#define entr() (printf("\n"))
+
 
 typedef struct {
 	unsigned char initStock;
@@ -61,20 +70,6 @@ void print(product *product) {
 	}
 }
 
-int payWithCard(product* products, int i) {
-	int price = (int)products[i].price * 2;
-	int funds = rand() % (price);
-	if (funds > products[i].price) {
-		funds -= products[i].price; // extraction from the card
-		products[i].sold++; // products of type i sold
-		printf("Payment approved\n");
-		//return 1;
-	} else {
-		printf("Insufficient funds\n");
-		//return 0;
-	}
-}
-
 void printIndexes(product* products) {
 	printf("[0] - Avira Prime\n");
 	printf("[1] - Antivirus PRO\n");
@@ -82,6 +77,438 @@ void printIndexes(product* products) {
 	printf("[3] - Password Manager\n");
 	printf("[4] - Optimizer\n");
 	printf("[5] - System Speedup\n");
+}
+
+int answer1 (int securityCode) {
+	int newPassword1, newPassword2;
+	printf("Introduce a code between 4 and 8 digits:\n");
+	printf("New Password: \n");
+	scanf("%d", &newPassword1);
+	printf("Enter Password Again: \n");
+	scanf("%d", &newPassword2);
+	if ((newPassword1 == newPassword2) && (1000 <= newPassword1) && (newPassword1 <= 99999999)) {
+		securityCode = newPassword1;
+	} else {
+		printf ("Passwords are not matching or are not having the number of digits required\n");
+	}
+	return securityCode;
+}
+
+void answer2(product *products) {
+	float s=0;
+	int i, nbProducts = 6;
+	printf("Up to this point of the day, there have been sold:\n\n");
+	for(i = 0;i <nbProducts; i++){
+		printf("%hhu products of this type %s in value of %.2f$ \n",products[i].sold,products[i].nume,products[i].sold*products[i].price);
+		s += products[i].sold*products[i].price;
+	}
+	printf("You have sold products in total value of %.2f$\n\n\n", s);
+}
+
+void answer3(product* products) {
+	float s = 0;
+	unsigned char i, nbProducts = 6;
+	for (i = 0; i <nbProducts; i++) {
+		s += products[i].sold * products[i].price;
+		products[i].sold = 0;
+	}
+	printf("Total income: %.2f$\n\n", s);
+}
+
+int managerRun(product* products, int *securityCode) {
+	unsigned char answer, nbProducts = 6, i;
+	printf("Welcome Manager!\n");
+	while(1) {
+		printf("EXIT: [0]\nCHANGE PASSWORD: [1]\nSALLING DATA: [2]\nREFUEL STOCK: [3]\n");
+		scanf("%hhu", &answer);
+		// exit administrator run
+		if (answer == 0) {
+			return answer;
+		} else if (answer == 1) {
+			*securityCode = answer1(*securityCode);
+		} 
+		else if (answer == 2) {
+			answer2(products);
+		} else if (answer == 3) {
+			answer3(products);
+		} else {
+			printf("Invalid code! Choose another one!\n");
+			}
+		}
+}
+
+void centre() {
+	for (int i = 0; i < 15; i++)
+    	printf(" ");
+}
+
+void top() {
+	centre(); 
+    printf(" "); 
+    for (int i = 0; i < 48; i++) printf("_");
+    printf(" ");	
+    entr(); 
+}
+void bottom() {
+	centre(); printf("|"); 
+    for (int i = 0; i < 48; i++) printf("_");
+    printf("|");	
+    entr(); 
+}
+
+void sides() {
+   	centre(); printf("|"); 
+   	for (int i = 0; i < 22; i++) printf(" ");
+   	printf("%s|", KBLU);	
+   	for (int i = 0; i < 25; i++) printf(" ");	
+   	printf("%s|", KNRM);
+   	entr();
+}
+
+void line1() {
+	centre(); printf("|"); 
+   	for (int i = 0; i < 6; i++) printf(" ");
+   	printf("_");
+   	for (int i = 0; i < 15; i++) printf(" ");
+   	printf("%s|", KBLU);
+   	for (int i = 0; i < 25; i++) printf(" ");		
+   	printf("%s|", KNRM);
+   	entr();
+}
+
+void line2() {
+	centre(); printf("|"); 
+   	for (int i = 0; i < 5; i++) printf(" ");
+   	printf("| |");
+   	for (int i = 0; i < 5; i++) printf(" ");
+   	printf("/|");
+   	for (int i = 0; i < 7; i++) printf(" ");	
+   	printf("%s|", KBLU);	
+   	for (int i = 0; i < 5; i++) printf(" ");	
+   	printf("%s( 0 )", KNRM);	
+   	for (int i = 0; i < 5; i++) printf(" ");	
+   	printf("%s( 1 )", KNRM);	
+   	for (int i = 0; i < 5; i++) printf(" ");	
+   	printf("%s|", KNRM);
+   	entr();
+}
+
+void line3() {
+	centre(); printf("|"); 
+   	for (int i = 0; i < 5; i++) printf(" ");
+   	printf("|_|");
+   	for (int i = 0; i < 5; i++) printf(" ");
+   	printf(" |");
+   	for (int i = 0; i < 7; i++) printf(" ");	
+   	printf("%s|", KBLU);	
+   	for (int i = 0; i < 4; i++) printf(" ");	
+   	printf("%s*CARD*", KYEL);	
+   	for (int i = 0; i < 5; i++) printf(" ");	
+   	printf("%s*CASH*", KYEL);	
+   	for (int i = 0; i < 4; i++) printf(" ");
+   	printf("%s|", KNRM);
+   	entr();
+}
+
+void lines() {
+	centre(); printf("|");
+	for (int i = 0; i < 2; i++) printf(" ");
+	for (int i = 0; i < 17; i++) printf("%s-", KRED);
+	for (int i = 0; i < 3; i++) printf(" ");	
+   	printf("%s|", KBLU);	
+   	for (int i = 0; i < 25; i++) printf(" ");	
+	printf("%s|", KNRM);
+   	entr();
+}
+
+void line5() {
+	centre(); printf("|"); 
+   	for (int i = 0; i < 6; i++) printf(" ");
+   	printf("_");
+   	for (int i = 0; i < 7; i++) printf(" ");
+   	printf("_");
+   	for (int i = 0; i < 7; i++) printf(" ");	
+   	printf("%s|", KBLU);	
+   	for (int i = 0; i < 4; i++) printf(" ");		
+   	for (int i = 0; i < 17; i++) printf("%s_", KGRN);	
+   	for (int i = 0; i < 4; i++) printf(" ");
+   	printf("%s|", KNRM);
+   	entr();	
+}
+
+void line6() {
+	centre(); printf("|"); 
+   	for (int i = 0; i < 6; i++) printf(" ");
+   	printf("_|");
+   	for (int i = 0; i < 6; i++) printf(" ");
+   	printf("_|");
+   	for (int i = 0; i < 6; i++) printf(" ");	
+   	printf("%s|", KBLU);	
+   	for (int i = 0; i < 4; i++) printf(" ");	
+   	printf("%s|  ", KGRN);
+   	printf("%s1", KCYN);
+   	printf("%s |  ", KGRN);
+   	printf("%s2", KCYN);
+   	printf("%s  | ", KGRN);
+   	printf("%s3", KCYN);
+   	printf("%s  |", KGRN);
+   	for (int i = 0; i < 4; i++) printf(" ");
+   	printf("%s|", KNRM);
+   	entr();	
+}
+
+void line7() {
+	centre(); printf("|"); 
+   	for (int i = 0; i < 5; i++) printf(" ");
+   	printf("|_");
+   	for (int i = 0; i < 7; i++) printf(" ");
+   	printf("_|");
+   	for (int i = 0; i < 6; i++) printf(" ");	
+   	printf("%s|", KBLU);	
+    for (int i = 0; i < 4; i++) printf(" ");	
+   	printf("%s|  ", KGRN);
+   	printf("%s4", KCYN);
+   	printf("%s |  ", KGRN);
+   	printf("%s5", KCYN);
+   	printf("%s  | ", KGRN);
+   	printf("%s6", KCYN);
+   	printf("%s  |", KGRN);
+   	for (int i = 0; i < 4; i++) printf(" ");
+   	printf("%s|", KNRM);
+   	entr();
+}
+
+void lines8() {
+	centre(); printf("|");
+	for (int i = 0; i < 2; i++) printf(" ");
+	for (int i = 0; i < 17; i++) printf("%s-", KRED);
+	for (int i = 0; i < 3; i++) printf(" ");	
+   	printf("%s|", KBLU);	
+   	for (int i = 0; i < 4; i++) printf(" ");	
+   	printf("%s|  ", KGRN);
+   	printf("%s7", KCYN);
+   	printf("%s |  ", KGRN);
+   	printf("%s8", KCYN);
+   	printf("%s  | ", KGRN);
+   	printf("%s9", KCYN);
+   	printf("%s  |", KGRN);
+   	for (int i = 0; i < 4; i++) printf(" ");
+	printf("%s|", KNRM);
+   	entr();
+}
+
+void line9() {
+	centre(); printf("|"); 
+   	for (int i = 0; i < 7; i++) printf(" ");
+   	for (int i = 0; i < 7; i++) printf(" ");
+   	printf("_");
+   	for (int i = 0; i < 7; i++) printf(" ");	
+   	printf("%s|", KBLU);	
+   	for (int i = 0; i < 4; i++) printf(" ");	
+   	printf("%s|▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓|  ", KGRN);
+   	for (int i = 0; i < 2; i++) printf(" ");
+   	printf("%s|", KNRM);
+   	entr();	
+}
+
+void line10() {
+	centre(); printf("|"); 
+   	for (int i = 0; i < 5; i++) printf(" ");
+   	printf("|_");	
+   	for (int i = 0; i < 6; i++) printf(" ");
+   	printf("|_");
+   	for (int i = 0; i < 7; i++) printf(" ");	
+   	printf("%s|", KBLU);	
+   	for (int i = 0; i < 25; i++) printf(" ");	
+   	printf("%s|", KNRM);
+   	entr();	
+}
+
+void line11() {
+	centre(); printf("|"); 
+   	for (int i = 0; i < 6; i++) printf(" ");
+   	printf(" |");	
+   	for (int i = 0; i < 6; i++) printf(" ");
+   	printf("_|");
+   	for (int i = 0; i < 6; i++) printf(" ");	
+   	printf("%s|", KBLU);	
+   	for (int i = 0; i < 4; i++) printf(" ");		
+   	for (int i = 0; i < 17; i++) printf("%s_", KYEL);	
+   	for (int i = 0; i < 4; i++) printf(" ");
+   	printf("%s|", KNRM);
+   	entr();	
+}
+
+void lines12() {
+	centre(); printf("|");
+	for (int i = 0; i < 2; i++) printf(" ");
+	for (int i = 0; i < 17; i++) printf("%s-", KRED);
+	for (int i = 0; i < 3; i++) printf(" ");	
+   	printf("%s|", KBLU);	
+   	for (int i = 0; i < 4; i++) printf(" ");	
+   	printf("%s|", KYEL);
+    for (int i = 0; i < 15; i++) printf("%s ", KYEL);
+    printf("%s|", KYEL);	
+   	for (int i = 0; i < 4; i++) printf(" ");
+	printf("%s|", KNRM);
+   	entr();
+}
+
+void lines12i() {
+	centre(); printf("|");
+	for (int i = 0; i < 2; i++) printf(" ");
+	for (int i = 0; i < 17; i++) printf("%s-", KRED);
+	for (int i = 0; i < 3; i++) printf(" ");	
+   	printf("%s|", KBLU);	
+   	for (int i = 0; i < 4; i++) printf(" ");	
+   	printf("%s|", KYEL);
+    for (int i = 0; i < 4; i++) printf(" ");	
+    for (int i = 0; i < 7; i++) printf("%s_", KRED);
+    for (int i = 0; i < 4; i++) printf(" ");		
+    printf("%s|", KYEL);	
+   	for (int i = 0; i < 4; i++) printf(" ");
+	printf("%s|", KNRM);
+   	entr();
+}
+
+void sides13() {
+   	centre(); printf("|"); 
+   	for (int i = 0; i < 22; i++) printf(" ");
+   	printf("%s|", KBLU);	
+   	for (int i = 0; i < 4; i++) printf(" ");	
+   	printf("%s|", KYEL);
+    for (int i = 0; i < 15; i++) printf("%s ", KYEL);
+    printf("%s|", KYEL);	
+   	for (int i = 0; i < 4; i++) printf(" ");
+   	printf("%s|", KNRM);
+   	entr();
+}
+
+void sides13i(int n) {
+   	centre(); printf("|"); 
+   	for (int i = 0; i < 22; i++) printf(" ");
+   	printf("%s|", KBLU);	
+   	for (int i = 0; i < 4; i++) printf(" ");	
+   	printf("%s|", KYEL);	
+    for (int i = 0; i < 4; i++) printf(" ");
+    printf("%s|__", KRED); 
+	printf("%s", KNRM);
+    printf("%d", n);	
+    printf("%s__|", KRED);
+   	for (int i = 0; i < 4; i++) printf(" ");
+   	printf("%s|", KYEL);	
+   	for (int i = 0; i < 4; i++) printf(" ");	
+   	printf("%s|", KNRM);
+   	entr();
+}
+
+void sides14() {
+   	centre(); printf("|"); 
+   	for (int i = 0; i < 22; i++) printf(" ");
+   	printf("%s|", KBLU);	
+   	for (int i = 0; i < 4; i++) printf(" ");	
+   	printf("%s|_", KYEL);
+    for (int i = 0; i < 13; i++) printf("%s_", KYEL);
+    printf("%s_|", KYEL);	
+   	for (int i = 0; i < 4; i++) printf(" ");
+   	printf("%s|", KNRM);
+   	entr();
+}
+
+void call_me() {
+	top(); 
+   	sides();
+   	line1();	
+   	line2();
+   	line3();
+   	lines();
+   	line5();
+   	line6();
+   	line7();
+   	lines8();
+   	line9();
+   	line10();
+   	line11();
+   	lines12();
+   	sides13();
+   	sides14();
+   	sides();
+   	bottom();	
+   	entr();
+}
+
+void call_i(int nr) {
+	top(); 
+   	sides();
+   	line1();	
+   	line2();
+   	line3();
+   	lines();
+   	line5();
+   	line6();
+   	line7();
+   	lines8();
+   	line9();
+   	line10();
+   	line11();
+   	lines12i();
+   	sides13i(nr);
+   	sides14();
+   	sides();
+   	bottom();	
+   	entr();
+}
+
+void wait() {
+        clock_t t_start = clock(), t_stop = clock();
+        while ((t_stop - t_start) / CLOCKS_PER_SEC < 3) {
+                t_stop = clock();
+        }
+        return;
+}
+
+int payWithCash(product* products, int i) {
+	float money1, money2, change;
+	printf("Introduce the money: || EXIT: 0\n\n");
+	scanf("%f", &money1);
+	if (money1 == 0) return 0;
+	printf("Credit: %.2f$\n", money1);
+	while (money1 < products[i].price) {
+		printf("Left to introduce: %.2f$\n", products[i].price - money1);
+		scanf("%f", &money2);
+		if (money2 == 0) {
+			return 0;
+		}
+			money1 += money2;
+			printf("Credit: %.2f$\n", money1);
+		}
+	products[i].sold++;
+	printf("Payment approved!\n");
+	call_i(i);
+	change = money1 - products[i].price;
+	printf("Your change: %.2f$\n\n\n", change); // change is returned
+	money1 = 0;
+	wait();
+	return 1;
+}
+
+
+int payWithCard(product* products, int i) {
+	int price = (int)products[i].price * 2;
+	int funds = rand() % (price);
+	if (funds > products[i].price) {
+		funds -= products[i].price; // extraction from the card
+		products[i].sold++; // products of type i sold
+		printf("Payment approved\n\n\n");
+		call_i(i);
+		wait();
+		return 1;
+	} else {
+		printf("Insufficient funds\n\n\n");
+		printf("Press 1 if you want to go back\n");
+		//int answer;
+		return 0;
+	}
 }
 
 int main() {
@@ -97,10 +524,11 @@ int main() {
 	} else {
 		read(products);
 	}
-	print(products);
+	//print(products);
 	printIndexes(products);
 	// while vendor machine is on
 	while (1) {
+		call_me();
 		// show vendor machine
 		// checking codes inserted
 		while (1) {
@@ -108,47 +536,9 @@ int main() {
 			// i = code of the product;
 			scanf("%d", &i);
 			if (i > 5) {
-				if (i == securityCode) {
-					printf("Welcome Manager!\n");
-					while(1) {
-						printf("EXIT: [0]\nCHANGE PASSWORD: [1]\nSALLING DATA: [2]\nREFUEL STOCK: [3]\n");
-						scanf("%hhu", &answer);
-						// exit administrator run
-						if (answer == 0) {
-							break;
-						} else if (answer == 1) {
-							printf("Introduce a code between 4 and 8 digits:\n");
-							printf("New Password: \n");
-							scanf("%d", &newPassword1);
-							printf("Enter Password Again: \n");
-							scanf("%d", &newPassword2);
-							if ((newPassword1 == newPassword2) && (1000 <= newPassword1) && (newPassword1 <= 99999999)) {
-								securityCode = newPassword1;
-							} else {
-								printf ("Passwords are not matching or are not having the number of digits required\n");
-							}
-						} 
-						else if (answer == 2) {
-								float s=0;
-								printf("Up to this point of the day, there have been sold:\n\n");
-								for(i = 0;i <nbProducts; i++){
-									printf("%hhu products of this type %s in value of %.2f \n",products[i].sold,products[i].nume,products[i].sold*products[i].price);
-									s += products[i].sold*products[i].price;
-								}
-								printf("You have sold products in total value of %.2f\n\n\n", s);
-
-						} else if (answer == 3) {
-							float s = 0;
-							for (i = 0; i <nbProducts; i++) {
-								s += products[i].sold * products[i].price;
-								products[i].sold = 0;
-							}
-							printf("Total income: %.2f$\n\n", s);
-						} else {
-							printf("Invalid code! Choose another one!\n");
-						}
-					}
-				} else { 
+				if (i == securityCode) { 
+					managerRun(products, &securityCode);
+				} else {
 					printf("Incorrect Code\n");
 				}
 			} else {
@@ -161,58 +551,27 @@ int main() {
 				printf("Unavailable product! Choose another one!\n");
 			} else {
 				printf("Product price: %.2f$\n", products[i].price);
-				printf("How do you want to pay?\n");
-				printf("Card:0 Cash:1\n");
-				// aici dau stop la timer
-				/*t_stop = clock();
-				//printf("HAHA\n");
-				answer = 10;
-				while (answer == 10) {
-					t_stop = clock();
-					if ((t_stop - t_start) / CLOCKS_PER_SEC >= 2) {
-						answer = 10;
-						break;
-					}
-				}		
-				//scanf("%hhu", &answer);
-				//printf("SUNT AICI!!!");
-				if (answer == 10) {
-					printf("Timp pierdut\n");
-					break;
-				}/*
-				/*while ((t_stop - t_start) / CLOCKS_PER_SEC < 2) {
-					t_stop = clock();
-				}*/
-				//printf("HAHA1\n");
-				// daca stop - start >= 15 reia ciclu;
-				scanf("%hhu", &answer);
-				if (answer > 1) {
-					; // it regoes to the insertion of the code
-				} else {
-					// card payment selected
-					if (answer == 0) {
-						printf("Approach the card!\n");
-						payWithCard(products, i);
-					}
-					// cash payment selected 
-					else {
-						// read money introduced
-						// arata produsul
-						printf("Introduce the money:\n");
-						scanf("%f", &money1);
-						printf("Credit: %.2f\n", money1);
-						while (money1 < products[i].price){
-							printf("Left to introduce: %.2f\n", products[i].price - money1);
-							scanf("%f", &money2);
-							money1 += money2;
-							printf("Credit: %.2f\n", money1);
+				printf("How do you want to pay?\n\n");
+				while (1) {
+					printf("Card:0 || Cash:1 || GoBack: any other key\n\n");
+					scanf("%hhu", &answer);
+					if (answer > 1) {
+						break; // it regoes to the insertion of the code
+					} else {
+						// card payment selected
+						if (answer == 0) {
+							printf("Approach the card!\n\n");
+							if (payWithCard(products, i)) break;
+							else continue;
 						}
-						products[i].sold++;
-						printf("Payment approved!\n");
-						change = money1 - products[i].price;
-						//grafic(product[i].nume)
-						printf("Your change: %.2f\n", change); // change is returned
-						money1 = 0;
+						// cash payment selected 
+						else {
+							// read money introduced
+							// arata produsul
+							//printf("Introduce the money!\n\n");
+							if (payWithCash(products, i) == 0) continue;
+							else break;
+						}
 					}
 				}
 			}
