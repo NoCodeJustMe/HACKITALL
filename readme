@@ -1,0 +1,23 @@
+// Copyright @StimDoarC (Petruc Rares, Mircea Andrei, Ciineanu Stefan Andrei) 08.03.2020 HackItAll preselectii
+
+Sunt prezentati indexii produselor, impreuna cu semnificatiile lor(produsul corespunzator indexului).
+Ulterior, tonomatul impreuna cu produsele este reprezentat grafic.
+Clientul tonomatului este rugat sa introduca indexul corespunzator produsului pe care si-l doreste.
+Daca se introduce un cod necorespunzator (mai mare decat al oricarui din cele prezente in tonomat), se verifica daca codul introdus este cel de securitate (in care administratorul are acces direct asupra tonomatului) si in caz afirmativ se intra in Administration Mode, iar in caz negativ se cere reintroducerea codului dorit de catre client.
+Daca se introduce un cod valid, se iese din bucla infinita corespunzatoare inserarii unui index.
+Se verifica daca indexul introdus este diferit de codul de securitate, iar in caz afirmativ se verifica daca exista stoc pentru produsul corespunzator indexului. Daca exista stoc, clientul este intrebat ce mod de plata doreste, avand si optiunea de a anula comanda pentru produsul respectiv. (inserand orice tasta mai mare ca 1)
+Daca clientul va alege optiunea de card (tasta 0), se va decide daca, clientul are fonduri unei functii rand, adaptate pretului produsului respectiv, avand si optiunea sa iasa din plata cu, cardul sau chiar cu plata produsului.
+Daca clientul va alege optiunea de cash (tasta 1), se vor introduce de la tastatura bani, pana cand pretul produsului va putea fi achitat, oferindu-i-se si rest in cazul in care este necesar.
+In cazul achitarii produsului, se va reprezenta din nou tonomatul, ce va avea in dreptul locului de ridicare al produsului, produsul corespunzator indexului ales de catre client.
+
+BONUS!
+		Pentru a intra in modul administrator, se va introduce securityCode-ul, setat ca default 7442.
+		De aici, meniul ii ofera 4 optiuni managerului printre care se enumera:
+			- iesirea din modul privilegiat(tasta 0);
+			- schimbarea parolei (tasta 1);
+			- vizualizarea datelor despre vanzari (tasta 2);
+			- incasarea banilor si reumplerea stocului (tasta 3);
+
+* Fiecare produs are un stoc de 10 bucati
+
+* Asa cum se vede in ilustratia din terminal, se considera ca tastatura tonomatului contine doar cifre. (asa ca, pentru buna functionare a programului sa nu introduceti simboluri sau litere).
